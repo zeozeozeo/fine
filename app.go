@@ -23,6 +23,7 @@ type App struct {
 	WindowFlags []uint32       // SDL2 window flags. See https://github.com/veandco/go-sdl2/blob/1cc5f3cf35451b753c5838cb3760d2126b3d315e/sdl/video.go#L273
 	DoClear     bool           // Do clear the previous frame before drawing the new frame?
 	ClearColor  color.RGBA     // The color to clear the background of the new frame.
+	Window      *sdl.Window    // SDL window.
 
 	// Time.
 

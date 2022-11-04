@@ -46,6 +46,7 @@ func (app *App) Run() error {
 		return err
 	}
 	defer window.Destroy()
+	app.Window = window
 
 	// Create renderer
 	if app.Renderer, err = sdl.CreateRenderer(window, -1, sdl.RENDERER_ACCELERATED); err != nil {
