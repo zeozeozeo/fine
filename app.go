@@ -150,3 +150,17 @@ func (app *App) FreeSprites() int {
 	}
 	return amount
 }
+
+// Returns the text in the OS clipboard.
+func (app *App) GetClipboard() string {
+	clipboardText, err := sdl.GetClipboardText()
+	if err != nil {
+		return ""
+	}
+	return clipboardText
+}
+
+// Sets text in the OS clipboard.
+func (app *App) SetClipboard(text string) error {
+	return sdl.SetClipboardText(text)
+}
