@@ -72,7 +72,7 @@ func (app *App) NewSpriteFromSurface(surface *sdl.Surface) (*Sprite, error) {
 		}
 		sprite = &Sprite{Surface: surface, Tex: texture, BlendMode: sdl.BLENDMODE_BLEND}
 	} else {
-		// The texture will be loaded later
+		// The texture will be loaded later (when the texture is first rendered)
 		sprite = &Sprite{Surface: surface, Tex: nil, BlendMode: sdl.BLENDMODE_BLEND}
 	}
 

@@ -10,6 +10,7 @@ type Rectangle struct {
 	Position Vec2    // The world position of the rect.
 	W        float64 // The width of the rect.
 	H        float64 // The height of the rect.
+	Filled   bool    // Specifies whether the rect is filled or not.
 	app      *App    // The app this rectangle belongs to.
 	entity   *Entity // The entity this rectangle belongs to.
 }
@@ -35,20 +36,25 @@ func (rect *Rectangle) Draw() {
 		rect.entity.Color.B,
 		rect.entity.Color.A,
 	)
-	rect.app.Renderer.DrawRect(
-		&sdl.Rect{
-			X: int32(rectX),
-			Y: int32(rectY),
-			W: int32(rect.W * rect.app.Camera.Zoom),
-			H: int32(rect.H * rect.app.Camera.Zoom),
-		},
-	)
+
+	sdlRect := &sdl.Rect{
+		X: int32(rectX),
+		Y: int32(rectY),
+		W: int32(rect.W * rect.app.Camera.Zoom),
+		H: int32(rect.H * rect.app.Camera.Zoom),
+	}
+
+	if rect.Filled {
+		rect.app.Renderer.FillRect(sdlRect)
+	} else {
+		rect.app.Renderer.DrawRect(sdlRect)
+	}
 
 	rect.app.Renderer.SetDrawColor(prevR, prevG, prevB, prevA)
 }
 
 // Creates a new rectangle on the scene.
-func (app *App) Rect(position Vec2, w, h float64, color color.RGBA) *Entity {
+func (app *App) Rect(position Vec2, w, h float64, color color.RGBA, isFilled bool) *Entity {
 	entity := &Entity{
 		Scene:   app.Scene,
 		Scale:   NewVec2(1, 1),
@@ -57,7 +63,7 @@ func (app *App) Rect(position Vec2, w, h float64, color color.RGBA) *Entity {
 		Color:   color,
 	}
 
-	rectShape := &Rectangle{Position: position, W: w, H: h, app: app, entity: entity}
+	rectShape := &Rectangle{Position: position, W: w, H: h, Filled: isFilled, app: app, entity: entity}
 	entity.Shape = rectShape
 
 	app.Scene.Entities = append(app.Scene.Entities, entity)

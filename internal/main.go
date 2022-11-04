@@ -33,7 +33,7 @@ func createEntities(app *fine.App) {
 		SetPivotCentered(true)
 
 	for i := float64(0); i < 50; i += 10 {
-		app.Rect(fine.NewVec2(100+i, 100+i), 200, 250, color.RGBA{255, 0, 0, 255})
+		app.Rect(fine.NewVec2(100+i, 100+i), 200, 250, color.RGBA{255, 0, 0, 255}, true)
 	}
 
 	for i := float64(0); i < 1000; i += 10 {
