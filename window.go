@@ -64,6 +64,9 @@ func (app *App) Run() error {
 	app.Running = true
 
 	for app.Running {
+		// app.ScrollDeltaX, app.ScrollDeltaY = 0, 0
+		app.IsScrolling = false
+
 		for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
 			// TODO: More events
 			switch t := event.(type) {
@@ -82,6 +85,9 @@ func (app *App) Run() error {
 				app.handleKeyboardEvent(t)
 			case *sdl.MouseButtonEvent:
 				app.handleMouseButtonEvent(t)
+			case *sdl.MouseWheelEvent:
+				app.ScrollDeltaX, app.ScrollDeltaY = t.PreciseX, t.PreciseY
+				app.IsScrolling = true
 			}
 		}
 
