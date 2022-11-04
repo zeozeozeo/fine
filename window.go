@@ -91,7 +91,9 @@ func (app *App) Run() error {
 		app.PreviousFrameTime = app.Time
 
 		// Draw
-		app.DrawFrame()
+		if err := app.DrawFrame(); err != nil {
+			return err
+		}
 		app.Renderer.Present()
 	}
 

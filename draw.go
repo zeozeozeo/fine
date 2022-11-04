@@ -1,11 +1,7 @@
 package fine
 
-import (
-	"log"
-)
-
 // Draws a new frame.
-func (app *App) DrawFrame() {
+func (app *App) DrawFrame() error {
 	if app.Update != nil {
 		app.Update(app.DeltaTime, app)
 	}
@@ -29,7 +25,9 @@ func (app *App) DrawFrame() {
 	// TODO: Proper layer system
 	// Draw entities
 	for _, entity := range app.Scene.Entities {
-		app.DrawEntity(entity)
+		if err := app.DrawEntity(entity); err != nil {
+			return err
+		}
 	}
 
 	// Check queued functions
@@ -46,12 +44,14 @@ func (app *App) DrawFrame() {
 	if app.PostRender != nil {
 		app.PostRender(app)
 	}
+
+	return nil
 }
 
 // Blits an entity to the screen.
-func (app *App) DrawEntity(entity *Entity) {
+func (app *App) DrawEntity(entity *Entity) error {
 	if !entity.Visible || entity.Opacity == 0 {
-		return
+		return nil
 	}
 
 	// Draw textures
@@ -59,9 +59,7 @@ func (app *App) DrawEntity(entity *Entity) {
 		if entity.Texture.Surface != nil && entity.Texture.Tex == nil {
 			// The surface was loaded but the texture was not, load it immediately
 			if err := entity.Texture.LoadTexture(app); err != nil {
-				log.Printf("[fatal] couldn't load entity texture: %s", err)
-				app.Close()
-				return
+				return err
 			}
 		}
 
@@ -75,4 +73,5 @@ func (app *App) DrawEntity(entity *Entity) {
 	} else if entity.Shape != nil {
 		entity.Shape.Draw()
 	}
+	return nil
 }

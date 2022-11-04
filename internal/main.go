@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"image/color"
 	"math"
+	"os"
 
 	"github.com/zeozeozeo/fine"
 )
@@ -15,7 +16,11 @@ var (
 
 func loadSprites(app *fine.App) {
 	var err error
-	gopher, err = app.NewSpriteFromPath("gopher.png")
+	reader, err := os.Open("gopher.png")
+	if err != nil {
+		panic(err)
+	}
+	gopher, err = app.NewSpriteFromReader(reader)
 	if err != nil {
 		panic(err)
 	}

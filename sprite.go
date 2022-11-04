@@ -3,6 +3,7 @@ package fine
 
 import (
 	"fmt"
+	"io"
 	"math"
 
 	"github.com/veandco/go-sdl2/img"
@@ -36,6 +37,31 @@ func (app *App) NewSpriteFromPath(path string) (*Sprite, error) {
 		return nil, err
 	}
 
+	return app.NewSpriteFromSurface(surface)
+}
+
+// Create a new sprite from a reader.
+func (app *App) NewSpriteFromReader(reader io.Reader) (*Sprite, error) {
+	data, err := io.ReadAll(reader)
+	if err != nil {
+		return nil, err
+	}
+
+	rwops, err := sdl.RWFromMem(data)
+	if err != nil {
+		return nil, err
+	}
+
+	surface, err := img.LoadRW(rwops, true)
+	if err != nil {
+		return nil, err
+	}
+
+	return app.NewSpriteFromSurface(surface)
+}
+
+// Create a new sprite from an SDL surface.
+func (app *App) NewSpriteFromSurface(surface *sdl.Surface) (*Sprite, error) {
 	var sprite *Sprite
 
 	if app.Running && app.Renderer != nil {
