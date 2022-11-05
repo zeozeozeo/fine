@@ -15,8 +15,9 @@ type Entity struct {
 	Pivot           Vec2          // Rotation pivot point. This is 0,0 by default.
 	IsPivotCentered bool          // Should the pivot point be centered?
 	FlipDir         FlipDirection // The flip direction of the texture. Default: FLIP_NONE.
-	Width           float64
-	Height          float64
+	Width           float64       // Width of the texture or shape.
+	Height          float64       // Height of the texture or shape.
+	DoCollide       bool          // Can this entity collide with other entities?
 }
 
 type FlipDirection int
@@ -36,11 +37,12 @@ type Shape interface {
 // Creates a new entity on the scene.
 func (app *App) Entity(position Vec2) *Entity {
 	entity := &Entity{
-		Position: position,
-		Scene:    app.Scene,
-		Scale:    NewVec2(1, 1),
-		Visible:  true,
-		Opacity:  1,
+		Position:  position,
+		Scene:     app.Scene,
+		Scale:     NewVec2(1, 1),
+		Visible:   true,
+		Opacity:   1,
+		DoCollide: true,
 	}
 
 	app.Scene.Entities = append(app.Scene.Entities, entity)
@@ -145,5 +147,11 @@ func (entity *Entity) FlipToggle(flip FlipDirection) *Entity {
 			entity.FlipDir = FLIP_NONE
 		}
 	}
+	return entity
+}
+
+// Specifies whether the entity can collide with other entities or not.
+func (entity *Entity) CanCollide(state bool) *Entity {
+	entity.DoCollide = state
 	return entity
 }

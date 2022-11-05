@@ -15,7 +15,7 @@ func (entity *Entity) Collide() CollisionInfo {
 	collision := CollisionInfo{}
 
 	for _, ent := range entity.Scene.Entities {
-		if ent == entity {
+		if ent == entity || !ent.DoCollide {
 			continue
 		}
 		pos2 := ent.Position
