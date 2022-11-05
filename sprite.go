@@ -40,7 +40,7 @@ func (app *App) NewSpriteFromPath(path string) (*Sprite, error) {
 	return app.NewSpriteFromSurface(surface)
 }
 
-// Create a new sprite from a reader.
+// Creates a new sprite from a reader.
 func (app *App) NewSpriteFromReader(reader io.Reader) (*Sprite, error) {
 	data, err := io.ReadAll(reader)
 	if err != nil {
@@ -60,7 +60,7 @@ func (app *App) NewSpriteFromReader(reader io.Reader) (*Sprite, error) {
 	return app.NewSpriteFromSurface(surface)
 }
 
-// Create a new sprite from an SDL surface.
+// Creates a new sprite from an SDL surface.
 func (app *App) NewSpriteFromSurface(surface *sdl.Surface) (*Sprite, error) {
 	var sprite *Sprite
 
@@ -108,14 +108,14 @@ func (sprite *Sprite) Free() {
 	}
 }
 
-// Set the sprite's blend mode.
+// Sets the sprite's blend mode.
 // Available blend modes: BLENDMODE_NONE, BLENDMODE_BLEND, BLENDMODE_ADD, BLENDMODE_MOD.
 func (sprite *Sprite) SetBlendMode(blendMode BlendMode) *Sprite {
 	sprite.BlendMode = sdl.BlendMode(blendMode)
 	return sprite
 }
 
-// Draw the sprite at the given screen coordinates.
+// Draws the sprite at the given screen coordinates.
 func (sprite *Sprite) Render(app *App, x, y int, entity *Entity) {
 	src := &sdl.Rect{
 		X: 0,

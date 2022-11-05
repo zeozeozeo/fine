@@ -45,7 +45,7 @@ func main() {
 	loadSprites(app)
 	createEntities(app)
 
-	app.After(2, func(a *fine.App) {
+	app.After(2, func(app *fine.App) {
 		fmt.Println("Hello, World!")
 	})
 
@@ -56,8 +56,13 @@ func main() {
 }
 
 func update(dt float64, app *fine.App) {
-	gopherEntity.Collide()
-	gopherEntity2.Position.X += dt * 100
+	gopherEntity.Position.Y += dt * 1000
+
+	collision := gopherEntity.Collide()
+	gopherEntity.Position.Y += collision.TopPushY
+	fmt.Println(collision.TopPushY)
+
+	// gopherEntity2.Position.X += dt * 100
 }
 
 /*
