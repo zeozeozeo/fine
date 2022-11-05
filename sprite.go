@@ -124,6 +124,17 @@ func (sprite *Sprite) Render(app *App, x, y int, entity *Entity) {
 		H: sprite.Height,
 	}
 
+	var flip sdl.RendererFlip
+	switch entity.FlipDir {
+	case FLIP_NONE:
+		flip = sdl.FLIP_NONE
+	case FLIP_HORIZONTAL:
+		flip = sdl.FLIP_HORIZONTAL
+	case FLIP_VERTICAL:
+		flip = sdl.FLIP_VERTICAL
+	}
+
+	// FIXME: This does not work for negative scales.
 	dst := &sdl.Rect{
 		X: int32(x),
 		Y: int32(y),
@@ -149,6 +160,6 @@ func (sprite *Sprite) Render(app *App, x, y int, entity *Entity) {
 		dst,
 		entity.Angle,
 		&sdl.Point{X: int32(math.Round(pivot.X)), Y: int32(math.Round(pivot.Y))},
-		sdl.FLIP_NONE,
+		flip,
 	)
 }

@@ -3,18 +3,27 @@ package fine
 import "image/color"
 
 type Entity struct {
-	Position        Vec2       // The world position of the entity.
-	Scene           *Scene     // The scene this entity is in.
-	Texture         *Sprite    // The texture (sprite) of the entity.
-	Shape           Shape      // The shape of the entity. This is ignored if a texture is set.
-	Color           color.RGBA // The color of the entity. This is ignored if a texture is set.
-	Scale           Vec2       // X and Y scale of the entity.
-	Opacity         float64    // Opacity of the entity between 0 and 1.
-	Visible         bool       // Specifies if the entity should be rendered or not.
-	Angle           float64    // Rotation angle.
-	Pivot           Vec2       // Rotation pivot point. This is 0,0 by default.
-	IsPivotCentered bool       // Should the pivot point be centered?
+	Position        Vec2          // The world position of the entity.
+	Scene           *Scene        // The scene this entity is in.
+	Texture         *Sprite       // The texture (sprite) of the entity.
+	Shape           Shape         // The shape of the entity. This is ignored if a texture is set.
+	Color           color.RGBA    // The color of the entity. This is ignored if a texture is set.
+	Scale           Vec2          // X and Y scale of the entity.
+	Opacity         float64       // Opacity of the entity between 0 and 1.
+	Visible         bool          // Specifies if the entity should be rendered or not.
+	Angle           float64       // Rotation angle.
+	Pivot           Vec2          // Rotation pivot point. This is 0,0 by default.
+	IsPivotCentered bool          // Should the pivot point be centered?
+	FlipDir         FlipDirection // The flip direction of the texture. Default: FLIP_NONE.
 }
+
+type FlipDirection int
+
+const (
+	FLIP_NONE       FlipDirection = 0
+	FLIP_HORIZONTAL FlipDirection = 1
+	FLIP_VERTICAL   FlipDirection = 2
+)
 
 // Entity shapes. It must implement Draw(), which will be called
 // when the entity needs to be rendered to the screen.
@@ -92,5 +101,47 @@ func (entity *Entity) SetAngle(angle float64) *Entity {
 // has a texture.
 func (entity *Entity) SetColor(color color.RGBA) *Entity {
 	entity.Color = color
+	return entity
+}
+
+// Horizontally flips the texture of the entity.
+func (entity *Entity) FlipHorizontal() *Entity {
+	entity.FlipDir = FLIP_HORIZONTAL
+	return entity
+}
+
+// Vertically flips the texture of the entity.
+func (entity *Entity) FlipVertical() *Entity {
+	entity.FlipDir = FLIP_VERTICAL
+	return entity
+}
+
+// Resets the flip direction of the texture.
+func (entity *Entity) FlipNone() *Entity {
+	entity.FlipDir = FLIP_NONE
+	return entity
+}
+
+// Sets the flip direction of the entity.
+func (entity *Entity) SetFlip(flip FlipDirection) *Entity {
+	entity.FlipDir = flip
+	return entity
+}
+
+// "Toggles" a flip direction of the entity.
+func (entity *Entity) FlipToggle(flip FlipDirection) *Entity {
+	if flip == FLIP_HORIZONTAL {
+		if entity.FlipDir == FLIP_NONE {
+			entity.FlipDir = FLIP_HORIZONTAL
+		} else if entity.FlipDir == FLIP_HORIZONTAL {
+			entity.FlipDir = FLIP_NONE
+		}
+	} else if flip == FLIP_VERTICAL {
+		if entity.FlipDir == FLIP_NONE {
+			entity.FlipDir = FLIP_VERTICAL
+		} else if entity.FlipDir == FLIP_VERTICAL {
+			entity.FlipDir = FLIP_NONE
+		}
+	}
 	return entity
 }

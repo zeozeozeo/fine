@@ -32,13 +32,7 @@ func createEntities(app *fine.App) {
 		SetScale(fine.NewVec2(10, 10)).
 		SetPivotCentered(true)
 
-	for i := float64(0); i < 50; i += 10 {
-		app.Rect(fine.NewVec2(100+i, 100+i), 200, 250, color.RGBA{255, 0, 0, 255}, true)
-	}
-
-	for i := float64(0); i < 1000; i += 10 {
-		app.Line(fine.NewVec2(200, 200), fine.NewVec2(200+i, 400+i/8), color.RGBA{0, 255, 0, 255})
-	}
+	app.ClearColor = color.RGBA{54, 54, 54, 255}
 }
 
 func main() {
@@ -62,11 +56,10 @@ func main() {
 // app is the application that called the function.
 func update(dt float64, app *fine.App) {
 	// sine := (math.Sin((4*app.Time+3)*math.Pi/2) + 1) / 2
-	// app.Camera.SetPosition(fine.NewVec2(math.Sin(app.Time)*200, math.Sin(app.Time*5)*400)).
+	// app.Camera.SetPosition(fine.NewVec2(math.Sin(app.Time)*200, math.Sin(app.Time*5)*400))
 	// app.Camera.SetZoom(app.Time / 2)
-	app.Camera.SetPosition(gopherEntity.Position)
 
-	gopherEntity.SetAngle(math.Sin(app.Time) * 360)
+	// gopherEntity.SetAngle(math.Sin(app.Time) * 360)
 	// SetOpacity((math.Sin((4*app.Time+3)*math.Pi/2) + 1) / 2)
 
 	if app.IsKeyJustDown(fine.KEY_w) {
@@ -79,4 +72,5 @@ func update(dt float64, app *fine.App) {
 
 	gopherEntity.Scale.X = (math.Sin(app.Time*5) + 1) * 10
 	gopherEntity.Scale.Y = (math.Sin(app.Time*3.5) + 1) * 10
+	// gopherEntity.FlipToggle(fine.FLIP_HORIZONTAL)
 }
