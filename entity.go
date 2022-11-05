@@ -15,6 +15,8 @@ type Entity struct {
 	Pivot           Vec2          // Rotation pivot point. This is 0,0 by default.
 	IsPivotCentered bool          // Should the pivot point be centered?
 	FlipDir         FlipDirection // The flip direction of the texture. Default: FLIP_NONE.
+	Width           float64
+	Height          float64
 }
 
 type FlipDirection int

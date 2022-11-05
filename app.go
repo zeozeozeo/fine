@@ -49,7 +49,7 @@ type App struct {
 	JustDownMouseButtons []ButtonInfo   // Mouse buttons pressed on this frame information.
 	JustUpMouseButtons   []ButtonInfo   // Mouse buttons released on this frame information.
 	ScrollDeltaX         float32        // Scrollwheel X delta.
-	ScrollDeltaY         float32        // Scrollwheel Y delta
+	ScrollDeltaY         float32        // Scrollwheel Y delta.
 	IsScrolling          bool           // Is the mouse scrolling?
 }
 

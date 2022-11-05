@@ -37,12 +37,16 @@ func (rect *Rectangle) Draw() {
 		rect.entity.Color.A,
 	)
 
-	// TODO: check -1 scale values
+	rect.entity.Width, rect.entity.Height = rect.W*rect.entity.Scale.X, rect.H*rect.entity.Scale.X
 	sdlRect := &sdl.Rect{
 		X: int32(rectX),
 		Y: int32(rectY),
 		W: int32(rect.W * rect.app.Camera.Zoom * rect.entity.Scale.X),
 		H: int32(rect.H * rect.app.Camera.Zoom * rect.entity.Scale.Y),
+	}
+
+	if !rect.app.isRectOnScreen(sdlRect.X, sdlRect.Y, sdlRect.W, sdlRect.H) {
+		return
 	}
 
 	if rect.Filled {

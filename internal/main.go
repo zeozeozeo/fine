@@ -3,15 +3,14 @@ package main
 import (
 	"fmt"
 	"image/color"
-	"math"
 	"os"
 
 	"github.com/zeozeozeo/fine"
 )
 
 var (
-	gopher       *fine.Sprite
-	gopherEntity *fine.Entity
+	gopher                      *fine.Sprite
+	gopherEntity, gopherEntity2 *fine.Entity
 )
 
 func loadSprites(app *fine.App) {
@@ -32,6 +31,11 @@ func createEntities(app *fine.App) {
 		SetScale(fine.NewVec2(10, 10)).
 		SetPivotCentered(true)
 
+	gopherEntity2 = app.Entity(fine.NewVec2(1280/4, 720/4)).
+		SetTexture(gopher).
+		SetScale(fine.NewVec2(10, 10)).
+		SetPivotCentered(true).SetAngle(90)
+
 	app.ClearColor = color.RGBA{54, 54, 54, 255}
 }
 
@@ -51,6 +55,12 @@ func main() {
 	}
 }
 
+func update(dt float64, app *fine.App) {
+	gopherEntity.Collide()
+	gopherEntity2.Position.X += dt * 100
+}
+
+/*
 // This function is called every frame.
 // dt is the time elapsed to draw the previous frame,
 // app is the application that called the function.
@@ -74,3 +84,4 @@ func update(dt float64, app *fine.App) {
 	gopherEntity.Scale.Y = (math.Sin(app.Time*3.5) + 1) * 10
 	// gopherEntity.FlipToggle(fine.FLIP_HORIZONTAL)
 }
+*/

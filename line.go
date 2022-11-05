@@ -36,6 +36,8 @@ func (line *Line) Draw() {
 		line.entity.Color.B,
 		line.entity.Color.A,
 	)
+
+	// TODO: Don't draw line if it's over the screen
 	line.app.Renderer.DrawLine(int32(x1), int32(y1), int32(x2), int32(y2))
 
 	line.app.Renderer.SetDrawColor(prevR, prevG, prevB, prevA)

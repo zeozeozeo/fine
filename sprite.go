@@ -135,11 +135,12 @@ func (sprite *Sprite) Render(app *App, x, y int, entity *Entity) {
 	}
 
 	// FIXME: This does not work for negative scales.
+	entity.Width, entity.Height = float64(sprite.Width)*entity.Scale.X, float64(sprite.Height)*entity.Scale.Y
 	dst := &sdl.Rect{
 		X: int32(x),
 		Y: int32(y),
-		W: int32(float64(sprite.Width) * entity.Scale.X * app.Camera.Zoom),
-		H: int32(float64(sprite.Height) * entity.Scale.Y * app.Camera.Zoom),
+		W: int32(entity.Width * app.Camera.Zoom),
+		H: int32(entity.Height * app.Camera.Zoom),
 	}
 
 	var pivot Vec2
@@ -150,7 +151,11 @@ func (sprite *Sprite) Render(app *App, x, y int, entity *Entity) {
 		pivot = entity.Pivot
 	}
 
-	// FIXME: Don't draw sprite if it's over the screen
+	// Don't draw sprite if it's over the screen
+	if !app.isRectOnScreen(dst.X, dst.Y, dst.W, dst.H) {
+		return
+	}
+
 	sprite.Tex.SetBlendMode(sprite.BlendMode)
 	sprite.Tex.SetAlphaMod(uint8(entity.Opacity * 255))
 
