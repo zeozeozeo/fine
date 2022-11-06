@@ -30,7 +30,6 @@ var (
 
 type Audio struct {
 	Buffer *beep.Buffer // Audio buffer.
-	Format beep.Format  // The audio format.
 }
 
 // Loads an audio file from a ReadCloser. If the audio sample rate doesn't match
@@ -74,7 +73,6 @@ func (app *App) LoadAudio(readCloser io.ReadCloser, inputFormat AudioFormat) (*A
 
 	audio := &Audio{
 		Buffer: buffer,
-		Format: format,
 	}
 
 	return audio, nil
@@ -112,4 +110,9 @@ func (audio *Audio) Play() {
 // Stops all playing audio.
 func (app *App) StopAudio() {
 	speaker.Clear()
+}
+
+// Returns the duration of the audio buffer in seconds.
+func (audio *Audio) Duration() float64 {
+	return (float64(audio.Buffer.Len()) / float64(audio.Buffer.Format().NumChannels)) / float64(audio.Buffer.Format().SampleRate)
 }

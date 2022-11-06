@@ -1,4 +1,4 @@
-// An example with a platformer character and camera.
+// An example with a platformer character, camera and audio.
 package main
 
 import (
