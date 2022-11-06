@@ -3,7 +3,6 @@ package main
 
 import (
 	_ "embed"
-	"fmt"
 	"image/color"
 	"math"
 
@@ -38,7 +37,6 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(jumpSound.Duration())
 
 	// Make the camera start at the gopher's position
 	app.Camera.Position = gopher.Position

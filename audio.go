@@ -13,6 +13,7 @@ import (
 	"github.com/faiface/beep/speaker"
 	"github.com/faiface/beep/vorbis"
 	"github.com/faiface/beep/wav"
+	"github.com/zeozeozeo/gomodplay/pkg/mod"
 )
 
 type AudioFormat int
@@ -22,6 +23,7 @@ const (
 	AUDIO_FLAC AudioFormat = 1 // .flac files.
 	AUDIO_WAV  AudioFormat = 2 // .wav files.
 	AUDIO_OGG  AudioFormat = 3 // .ogg files.
+	AUDIO_MOD  AudioFormat = 4 // Amiga .mod files.
 )
 
 var (
@@ -36,6 +38,8 @@ type Audio struct {
 // the configured app sample rate, the file will be resampled.
 func (app *App) LoadAudio(readCloser io.ReadCloser, inputFormat AudioFormat) (*Audio, error) {
 	var streamer beep.StreamSeekCloser
+	var modStreamer beep.Streamer
+	isMod := false
 	var format beep.Format
 	var err error
 
@@ -48,6 +52,9 @@ func (app *App) LoadAudio(readCloser io.ReadCloser, inputFormat AudioFormat) (*A
 		streamer, format, err = wav.Decode(readCloser)
 	case AUDIO_OGG:
 		streamer, format, err = vorbis.Decode(readCloser)
+	case AUDIO_MOD:
+		modStreamer, format, err = app.loadMod(readCloser)
+		isMod = true
 	default:
 		return nil, errUnsupportedFormat
 	}
@@ -68,7 +75,11 @@ func (app *App) LoadAudio(readCloser io.ReadCloser, inputFormat AudioFormat) (*A
 		)
 		buffer.Append(resampler)
 	} else {
-		buffer.Append(streamer)
+		if !isMod {
+			buffer.Append(streamer)
+		} else {
+			buffer.Append(modStreamer)
+		}
 	}
 
 	audio := &Audio{
@@ -114,5 +125,42 @@ func (app *App) StopAudio() {
 
 // Returns the duration of the audio buffer in seconds.
 func (audio *Audio) Duration() float64 {
-	return float64(audio.Buffer.Len()) / (float64(audio.Buffer.Format().SampleRate) / float64(audio.Buffer.Format().NumChannels))
+	return float64(audio.Buffer.Len()) / float64(audio.Buffer.Format().SampleRate)
+}
+
+type modStreamer struct {
+	player *mod.Player
+}
+
+func (s modStreamer) Stream(samples [][2]float64) (n int, ok bool) {
+	if s.player.State.SongHasEnded || s.player.State.HasLooped {
+		return 0, false
+	}
+	for idx := range samples {
+		left, right := s.player.NextSample()
+		samples[idx][0] = float64(left)
+		samples[idx][1] = float64(right)
+	}
+	return len(samples), true
+}
+
+func (s modStreamer) Err() error {
+	return nil
+}
+
+func (app *App) loadMod(readCloser io.ReadCloser) (beep.Streamer, beep.Format, error) {
+	streamer := modStreamer{}
+	streamer.player = mod.NewModPlayer(uint32(app.SampleRate))
+
+	err := streamer.player.LoadModFile(readCloser)
+	if err != nil {
+		return nil, beep.Format{}, err
+	}
+	streamer.player.Play()
+
+	return streamer, beep.Format{
+		SampleRate:  beep.SampleRate(app.SampleRate),
+		NumChannels: 2,
+		Precision:   4,
+	}, nil
 }
