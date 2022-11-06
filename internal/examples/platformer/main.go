@@ -26,6 +26,7 @@ var gopherSpriteData []byte
 func main() {
 	app := fine.NewApp("Platformer", 1280, 720)
 	app.SetUpdateFunc(update)
+	// app.AddWindowFlags(fine.WINDOW_RESIZABLE) - makes the window resizeable
 	createEntities(app)
 	createLevel(app)
 
