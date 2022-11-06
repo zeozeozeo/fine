@@ -20,7 +20,7 @@ type App struct {
 	OnClose     OnCloseFunc    // Will be called when the window should be closed. Should return whether the window should close or not.
 	IgnoreClose bool           // Specifies if the window should ignore quit events.
 	Running     bool           // Specifies if the app is running or not.
-	WindowFlags []uint32       // SDL2 window flags. See https://github.com/veandco/go-sdl2/blob/1cc5f3cf35451b753c5838cb3760d2126b3d315e/sdl/video.go#L273
+	WindowFlags []WindowFlag   // SDL2 window flags. See https://github.com/veandco/go-sdl2/blob/1cc5f3cf35451b753c5838cb3760d2126b3d315e/sdl/video.go#L273
 	DoClear     bool           // Do clear the previous frame before drawing the new frame?
 	ClearColor  color.RGBA     // The color to clear the background of the new frame.
 	Window      *sdl.Window    // SDL window.
@@ -59,9 +59,9 @@ func NewApp(title string, width, height int32) *App {
 		Title:  title,
 		Width:  width,
 		Height: height,
-		WindowFlags: []uint32{
-			sdl.WINDOW_SHOWN,
-			sdl.WINDOW_OPENGL,
+		WindowFlags: []WindowFlag{
+			WINDOW_SHOWN,
+			WINDOW_OPENGL,
 		},
 		SwapInterval: 1,
 		Scene:        &Scene{},
@@ -167,4 +167,16 @@ func (app *App) GetClipboard() string {
 // Sets text in the OS clipboard.
 func (app *App) SetClipboard(text string) error {
 	return sdl.SetClipboardText(text)
+}
+
+// Sets window flags. Default flags: WINDOW_SHOWN, WINDOW_OPENGL.
+func (app *App) SetWindowFlags(flags ...WindowFlag) *App {
+	app.WindowFlags = flags
+	return app
+}
+
+// Adds window flags. Default flags: WINDOW_SHOWN, WINDOW_OPENGL.
+func (app *App) AddWindowFlags(flags ...WindowFlag) *App {
+	app.WindowFlags = append(app.WindowFlags, flags...)
+	return app
 }
