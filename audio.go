@@ -86,6 +86,10 @@ func (app *App) LoadAudioFromData(data []byte, inputFormat AudioFormat) (*Audio,
 	return app.LoadAudio(io.NopCloser(buf), inputFormat)
 }
 
+func (app *App) LoadAudioFromReader(reader io.Reader, inputFormat AudioFormat) (*Audio, error) {
+	return app.LoadAudio(io.NopCloser(reader), inputFormat)
+}
+
 func (app *App) initAudio() {
 	beepSampleRate := beep.SampleRate(app.SampleRate)
 	// TODO: Custom buffer sizes
