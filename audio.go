@@ -31,7 +31,9 @@ var (
 )
 
 type Audio struct {
-	Buffer *beep.Buffer // Audio buffer.
+	Buffer     *beep.Buffer // Audio buffer.
+	LastPlayed float64      // The time when the audio was last played.
+	app        *App
 }
 
 // Loads an audio file from a ReadCloser. If the audio sample rate doesn't match
@@ -84,6 +86,7 @@ func (app *App) LoadAudio(readCloser io.ReadCloser, inputFormat AudioFormat) (*A
 
 	audio := &Audio{
 		Buffer: buffer,
+		app:    app,
 	}
 
 	return audio, nil
@@ -115,6 +118,7 @@ func (audio *Audio) GetStream() beep.StreamSeeker {
 
 // Starts playing the audio. This is an asynchronous call.
 func (audio *Audio) Play() {
+	audio.LastPlayed = audio.app.Time
 	speaker.Play(audio.GetStream())
 }
 
@@ -126,6 +130,11 @@ func (app *App) StopAudio() {
 // Returns the duration of the audio buffer in seconds.
 func (audio *Audio) Duration() float64 {
 	return float64(audio.Buffer.Len()) / float64(audio.Buffer.Format().SampleRate)
+}
+
+// Returns if the audio has stopped playing or not.
+func (audio *Audio) Ended() bool {
+	return (audio.app.Time - audio.LastPlayed) >= audio.Duration()
 }
 
 type modStreamer struct {
