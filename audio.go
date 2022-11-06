@@ -114,5 +114,5 @@ func (app *App) StopAudio() {
 
 // Returns the duration of the audio buffer in seconds.
 func (audio *Audio) Duration() float64 {
-	return (float64(audio.Buffer.Len()) / float64(audio.Buffer.Format().NumChannels)) / float64(audio.Buffer.Format().SampleRate)
+	return float64(audio.Buffer.Len()) / (float64(audio.Buffer.Format().SampleRate) / float64(audio.Buffer.Format().NumChannels))
 }
