@@ -12,6 +12,8 @@ import (
 func (app *App) Run() error {
 	runtime.LockOSThread()
 
+	defer app.FreeSprites()
+
 	// Initialize SDL
 	if err := sdl.Init(sdl.INIT_EVERYTHING); err != nil {
 		return err
@@ -54,7 +56,6 @@ func (app *App) Run() error {
 	}
 	app.Renderer.Clear()
 	defer app.Renderer.Destroy()
-	defer app.FreeSprites()
 
 	// Start draw loop
 	startTime := time.Now()

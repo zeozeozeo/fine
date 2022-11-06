@@ -16,12 +16,14 @@ var (
 	gopherDirection string // "left", "right" or ""
 	walkStartTime   float64
 	cameraVelocity  float64
+	jumpSound       *fine.Audio
 )
 
-// Bake gopher.png into the executable
-//
 //go:embed gopher.png
 var gopherSpriteData []byte
+
+//go:embed jump.ogg
+var gopherJumpSoundData []byte
 
 func main() {
 	app := fine.NewApp("Platformer", 1280, 720)
@@ -29,6 +31,12 @@ func main() {
 	// app.AddWindowFlags(fine.WINDOW_RESIZABLE) - makes the window resizeable
 	createEntities(app)
 	createLevel(app)
+
+	var err error
+	jumpSound, err = app.LoadAudioFromData(gopherJumpSoundData, fine.AUDIO_OGG)
+	if err != nil {
+		panic(err)
+	}
 
 	// Make the camera start at the gopher's position
 	app.Camera.Position = gopher.Position
@@ -100,7 +108,7 @@ func update(dt float64, app *fine.App) {
 
 	// The walking animation could start abruptly, so subtract the time when we started
 	// walking from it.
-	if app.IsKeyJustDown(fine.KEY_w) {
+	if app.IsKeyJustDown(fine.KEY_a) || app.IsKeyJustDown(fine.KEY_d) {
 		walkStartTime = app.Time
 	}
 
@@ -136,6 +144,9 @@ func update(dt float64, app *fine.App) {
 		if gopher.Scale.X > 2 {
 			gopher.Scale.X -= 1
 		}
+
+		// Play sound effect
+		jumpSound.Play()
 	}
 
 	// Jumping animation

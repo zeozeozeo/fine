@@ -103,7 +103,7 @@ func (sprite *Sprite) LoadTexture(app *App) error {
 	return nil
 }
 
-// Free's the sprite's SDL texture and surface.
+// Frees the sprite's SDL texture and surface.
 func (sprite *Sprite) Free() {
 	if sprite.Surface != nil {
 		sprite.Surface.Free()

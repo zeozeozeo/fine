@@ -51,11 +51,16 @@ type App struct {
 	ScrollDeltaX         float32        // Scrollwheel X delta.
 	ScrollDeltaY         float32        // Scrollwheel Y delta.
 	IsScrolling          bool           // Is the mouse scrolling?
+
+	// Audio.
+
+	SampleRate        int // Audio sample rate (default: 44100).
+	ResamplingQuality int // 1: high perfomance, low quality; 3-4: balanced (recommended); 6: high CPU usage; >6 super high CPU usage (default: 4)
 }
 
 // Creates a new app with a window title and size.
 func NewApp(title string, width, height int32) *App {
-	return &App{
+	app := &App{
 		Title:  title,
 		Width:  width,
 		Height: height,
@@ -63,11 +68,16 @@ func NewApp(title string, width, height int32) *App {
 			WINDOW_SHOWN,
 			WINDOW_OPENGL,
 		},
-		SwapInterval: 1,
-		Scene:        &Scene{},
-		DoClear:      true,
-		Camera:       &Camera{Position: NewVec2(0, 0), Zoom: 1},
+		SwapInterval:      1,
+		Scene:             &Scene{},
+		DoClear:           true,
+		Camera:            &Camera{Position: NewVec2(0, 0), Zoom: 1},
+		SampleRate:        44100,
+		ResamplingQuality: 4,
 	}
+	app.initAudio()
+
+	return app
 }
 
 // Sets the update function (called every frame).
