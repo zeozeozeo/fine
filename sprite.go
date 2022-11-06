@@ -47,6 +47,11 @@ func (app *App) NewSpriteFromReader(reader io.Reader) (*Sprite, error) {
 		return nil, err
 	}
 
+	return app.NewSpriteFromData(data)
+}
+
+// Creates a new sprite from bytes.
+func (app *App) NewSpriteFromData(data []byte) (*Sprite, error) {
 	rwops, err := sdl.RWFromMem(data)
 	if err != nil {
 		return nil, err
@@ -137,8 +142,8 @@ func (sprite *Sprite) Render(app *App, x, y int, entity *Entity) {
 	// FIXME: This does not work for negative scales.
 	entity.Width, entity.Height = float64(sprite.Width)*entity.Scale.X, float64(sprite.Height)*entity.Scale.Y
 	dst := &sdl.Rect{
-		X: int32(x),
-		Y: int32(y),
+		X: int32(float64(x)) + app.Width/2,
+		Y: int32(float64(y)) + app.Height/2,
 		W: int32(entity.Width * app.Camera.Zoom),
 		H: int32(entity.Height * app.Camera.Zoom),
 	}

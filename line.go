@@ -11,17 +11,18 @@ type Line struct {
 
 // Draws a line to the screen.
 func (line *Line) Draw() {
+	halfWidth, halfHeight := float64(line.app.Width)/2, float64(line.app.Height)/2
 	x1, y1 := line.app.Camera.WorldToScreen(
 		NewVec2(
-			line.Start.X*line.app.Camera.Zoom,
-			line.Start.Y*line.app.Camera.Zoom,
+			(line.Start.X*line.app.Camera.Zoom)+halfWidth,
+			line.Start.Y*line.app.Camera.Zoom+halfHeight,
 		),
 	)
 
 	x2, y2 := line.app.Camera.WorldToScreen(
 		NewVec2(
-			line.End.X*line.app.Camera.Zoom,
-			line.End.Y*line.app.Camera.Zoom,
+			(line.End.X*line.app.Camera.Zoom)+halfWidth,
+			(line.End.Y*line.app.Camera.Zoom)+halfHeight,
 		),
 	)
 

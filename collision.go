@@ -5,6 +5,8 @@ type CollisionInfo struct {
 	BackwardPushX float64 // The amount to add to the X position to push the entity out of the collision to the backward.
 	TopPushY      float64 // The amount to add to the Y position to push the entity out of the collision to the top.
 	BottomPushY   float64 // The amount to add to the Y position to push the entity out of the collision to the bottom.
+	IsFalling     bool    // This is true if the entity isn't being pushed to the top.
+	Entity        *Entity // The entity this collision happened with.
 }
 
 // Checks collision with other entites.
@@ -30,8 +32,17 @@ func (entity *Entity) Collide() CollisionInfo {
 			collision.BackwardPushX = pos2.X - (pos1.X + entity.Width)
 			collision.TopPushY = pos2.Y - (pos1.Y + entity.Height)
 			collision.BottomPushY = (pos2.Y + ent.Height) - pos1.Y
+			collision.Entity = ent
 			break
 		}
+	}
+
+	// If the entity is not being pushed to the top, it is falling
+	// NOTE:  This won't work if the entity isn't constantly falling.
+	// FIXME: Instead, check if this entity has an another entity under itself.
+	//        That will only work with platformer games, though...
+	if collision.TopPushY == 0 {
+		collision.IsFalling = true
 	}
 
 	return collision

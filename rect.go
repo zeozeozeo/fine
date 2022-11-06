@@ -7,21 +7,19 @@ import (
 )
 
 type Rectangle struct {
-	Position Vec2    // The world position of the rect.
-	W        float64 // The width of the rect.
-	H        float64 // The height of the rect.
-	Filled   bool    // Specifies whether the rect is filled or not.
-	app      *App    // The app this rectangle belongs to.
-	entity   *Entity // The entity this rectangle belongs to.
+	W      float64 // The width of the rect.
+	H      float64 // The height of the rect.
+	Filled bool    // Specifies whether the rect is filled or not.
+	app    *App    // The app this rectangle belongs to.
+	entity *Entity // The entity this rectangle belongs to.
 }
 
 // Draws a rectangle to the screen.
 func (rect *Rectangle) Draw() {
-	// TODO: Don't draw rect if it's not on the screen
 	rectX, rectY := rect.app.Camera.WorldToScreen(
 		NewVec2(
-			rect.Position.X*rect.app.Camera.Zoom,
-			rect.Position.Y*rect.app.Camera.Zoom,
+			rect.entity.Position.X*rect.app.Camera.Zoom,
+			rect.entity.Position.Y*rect.app.Camera.Zoom,
 		),
 	)
 
@@ -39,10 +37,10 @@ func (rect *Rectangle) Draw() {
 
 	rect.entity.Width, rect.entity.Height = rect.W*rect.entity.Scale.X, rect.H*rect.entity.Scale.X
 	sdlRect := &sdl.Rect{
-		X: int32(rectX),
-		Y: int32(rectY),
-		W: int32(rect.W * rect.app.Camera.Zoom * rect.entity.Scale.X),
-		H: int32(rect.H * rect.app.Camera.Zoom * rect.entity.Scale.Y),
+		X: int32(float64(rectX)) + rect.app.Width/2,
+		Y: int32(float64(rectY)) + rect.app.Height/2,
+		W: int32(rect.entity.Width * rect.app.Camera.Zoom),
+		H: int32(rect.entity.Height * rect.app.Camera.Zoom),
 	}
 
 	if !rect.app.isRectOnScreen(sdlRect.X, sdlRect.Y, sdlRect.W, sdlRect.H) {
@@ -61,14 +59,18 @@ func (rect *Rectangle) Draw() {
 // Creates a new rectangle on the scene.
 func (app *App) Rect(position Vec2, w, h float64, color color.RGBA, isFilled bool) *Entity {
 	entity := &Entity{
-		Scene:   app.Scene,
-		Scale:   NewVec2(1, 1),
-		Visible: true,
-		Opacity: 1,
-		Color:   color,
+		Position:  position,
+		Scene:     app.Scene,
+		Scale:     NewVec2(1, 1),
+		Visible:   true,
+		Opacity:   1,
+		Color:     color,
+		Width:     w,
+		Height:    h,
+		DoCollide: true,
 	}
 
-	rectShape := &Rectangle{Position: position, W: w, H: h, Filled: isFilled, app: app, entity: entity}
+	rectShape := &Rectangle{W: w, H: h, Filled: isFilled, app: app, entity: entity}
 	entity.Shape = rectShape
 
 	app.Scene.Entities = append(app.Scene.Entities, entity)
