@@ -1,3 +1,4 @@
+// An example with a platformer character and camera.
 package main
 
 import (
