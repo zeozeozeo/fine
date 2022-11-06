@@ -36,8 +36,6 @@ github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINE
 github.com/rivo/uniseg v0.1.0/go.mod h1:J6wj4VEh+S6ZtnVlnTBMWIodfgj8LQOQFoIToxlJtxc=
 github.com/veandco/go-sdl2 v0.4.25 h1:J5ac3KKOccp/0xGJA1PaNYKPUcZm19IxhDGs8lJofPI=
 github.com/veandco/go-sdl2 v0.4.25/go.mod h1:OROqMhHD43nT4/i9crJukyVecjPNYYuCofep6SNiAjY=
-github.com/zeozeozeo/gomodplay v0.0.0-20221026171024-3e4315c41e3f h1:Cf0FIDegsU8gCd6rsaD4oW2MecfwgVzLPXxagcylWjk=
-github.com/zeozeozeo/gomodplay v0.0.0-20221026171024-3e4315c41e3f/go.mod h1:Gu6MNKzRV4OwRuEf/0vVXd8Q5gPrMO8IHQbTIN7RdKw=
 github.com/zeozeozeo/gomodplay v0.0.0-20221106170112-681a870e8e46 h1:2k0D2MCQTMfm+wDsccjWRBLKUrsvyDccUrkKVeXVMXQ=
 github.com/zeozeozeo/gomodplay v0.0.0-20221106170112-681a870e8e46/go.mod h1:Gu6MNKzRV4OwRuEf/0vVXd8Q5gPrMO8IHQbTIN7RdKw=
 golang.org/x/exp v0.0.0-20190306152737-a1d7652674e8 h1:idBdZTd9UioThJp8KpM/rTSinK/ChZFBE43/WtIy8zg=

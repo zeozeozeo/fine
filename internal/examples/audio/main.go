@@ -30,8 +30,9 @@ func main() {
 
 func update(dt float64, app *fine.App) {
 	if !isPlaying {
-		audio.Play()
+		audio.Play() // Start the song
 
+		// Close the app when the song is over
 		app.After(audio.Duration(), func(app *fine.App) {
 			app.Close()
 		})
@@ -39,7 +40,8 @@ func update(dt float64, app *fine.App) {
 		isPlaying = true
 	}
 
+	// Background animation
 	app.ClearColor.R = uint8(math.Sin(app.Time) * 255)
-	app.ClearColor.G = uint8(math.Sin(app.Time*2) * 255)
+	app.ClearColor.G = uint8(math.Cos(app.Time*2) * 255)
 	app.ClearColor.B = uint8(math.Sin(app.Time*4) * 255)
 }
