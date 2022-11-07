@@ -22,7 +22,7 @@ var (
 //go:embed gopher.png
 var gopherSpriteData []byte
 
-//go:embed jump.ogg
+//go:embed jump.wav
 var gopherJumpSoundData []byte
 
 func main() {
@@ -33,7 +33,7 @@ func main() {
 	createLevel(app)
 
 	var err error
-	jumpSound, err = app.LoadAudioFromData(gopherJumpSoundData, fine.AUDIO_OGG)
+	jumpSound, err = app.LoadAudioFromData(gopherJumpSoundData, fine.AUDIO_WAV)
 	if err != nil {
 		panic(err)
 	}

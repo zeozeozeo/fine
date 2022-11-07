@@ -23,7 +23,7 @@ const (
 	AUDIO_FLAC AudioFormat = 1 // .flac files.
 	AUDIO_WAV  AudioFormat = 2 // .wav files.
 	AUDIO_OGG  AudioFormat = 3 // .ogg files.
-	AUDIO_MOD  AudioFormat = 4 // Amiga .mod files.
+	AUDIO_MOD  AudioFormat = 4 // .mod files.
 )
 
 var (
@@ -105,7 +105,7 @@ func (app *App) LoadAudioFromReader(reader io.Reader, inputFormat AudioFormat) (
 func (app *App) initAudio() {
 	beepSampleRate := beep.SampleRate(app.SampleRate)
 	// TODO: Custom buffer sizes
-	err := speaker.Init(beepSampleRate, beepSampleRate.N(time.Second/10))
+	err := speaker.Init(beepSampleRate, beepSampleRate.N(time.Millisecond*128))
 	if err != nil {
 		log.Printf("[warn] failed to initialize audio speaker: %s", err)
 	}
