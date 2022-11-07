@@ -1,3 +1,9 @@
+<p align="center">
+  <a href="https://godoc.org/github.com/zeozeozeo/fine"><img src="https://pkg.go.dev/badge/github.com/zeozeozeo/fine" alt="Documentation"></img></a>
+  <a href="https://goreportcard.com/report/github.com/zeozeozeo/fine"><img src="https://goreportcard.com/badge/github.com/zeozeozeo/fine" alt="Go Report Card"/></a>
+  <a href="https://unlicense.org/"><img src="https://img.shields.io/github/license/zeozeozeo/fine" alt="License"/></a>
+
+</p>
 <p><h1 align="center">Fine - a super easy to use 2D game engine for Go.</h1></p>
 
 Fine is a cross-platform OpenGL 2D engine (with [SDL2](https://github.com/veandco/go-sdl2)) written with Go. It has audio support, text rendering, collisons and much more.
