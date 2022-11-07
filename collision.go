@@ -10,7 +10,7 @@ type CollisionInfo struct {
 }
 
 // Checks collision with other entites.
-// This feature is still expiremental. Suitable for platformer games.
+// This feature is still experimental. Suitable for platformer games.
 func (entity *Entity) Collide() CollisionInfo {
 	// Check collisions with other entities
 	pos1 := entity.Position

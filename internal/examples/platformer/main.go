@@ -113,7 +113,7 @@ func update(dt float64, app *fine.App) {
 	}
 
 	// Walking animation. This scales a sine wave to be in the range of 0..1
-	// and adds 5 to it (because the intial scale of the gopher is 5)
+	// and adds 5 to it (because the initial scale of the gopher is 5)
 	if isWalking {
 		gopher.Scale.Y = ((math.Sin((12*(app.Time-walkStartTime)+3)*math.Pi/2) + 1) / 2) + 5
 	} else if gopher.Scale.Y > 5 {

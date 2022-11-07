@@ -125,7 +125,6 @@ func (app *App) FreeSprite(sprite *Sprite) {
 			break
 		}
 	}
-	sprite = nil
 }
 
 // Sets the sprite's blend mode.

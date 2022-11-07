@@ -9,13 +9,13 @@ import (
 type OnCloseFunc func() bool                                        // Function that is called after the window closes. Should return whether the window should close or not.
 type UpdateFunc func(dt float64, app *App)                          // Function that is called every frame.
 type PostRenderFunc func(app *App)                                  // Function that is called at the end of drawing each frame.
-type OnKeyEventFunc func(key Key, direction KeyDirection, app *App) // Function that is called when a key is down or up. Recieves the key, the direction and the app.
+type OnKeyEventFunc func(key Key, direction KeyDirection, app *App) // Function that is called when a key is down or up. Receives the key, the direction and the app.
 
 type App struct {
 	Title       string         // Window title (TODO: Change title).
 	Width       int32          // Window width.
 	Height      int32          // Window height.
-	Update      UpdateFunc     // Will be called every frame, recieves the delta time in seconds.
+	Update      UpdateFunc     // Will be called every frame, receives the delta time in seconds.
 	PostRender  PostRenderFunc // Will be called after the rendering of all entities on a frame.
 	OnClose     OnCloseFunc    // Will be called when the window should be closed. Should return whether the window should close or not.
 	IgnoreClose bool           // Specifies if the window should ignore quit events.
@@ -55,7 +55,7 @@ type App struct {
 	// Audio.
 
 	SampleRate        int   // Audio sample rate (default: 44100).
-	ResamplingQuality int   // 1: high perfomance, low quality; 3-4: balanced (recommended); 6: high CPU usage; >6 super high CPU usage (default: 4)
+	ResamplingQuality int   // 1: high performance, low quality; 3-4: balanced (recommended); 6: high CPU usage; >6 super high CPU usage (default: 4)
 	BufferNs          int64 // The buffer size in nanoseconds (default: 48000000 (48ms)).
 }
 
