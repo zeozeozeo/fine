@@ -14,8 +14,8 @@ func (camera *Camera) SetPosition(position Vec2) *Camera {
 }
 
 // Set the zoom of the camera. Bigger value = bigger objects.
-// FIXME: This zooms to 0,0 instead of the center of the screen.
 func (camera *Camera) SetZoom(zoom float64) *Camera {
+	// TODO: Zoom is still acting weird, test it
 	camera.Zoom = zoom
 	return camera
 }

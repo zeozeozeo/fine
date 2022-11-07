@@ -70,7 +70,6 @@ func (app *App) Run() error {
 		app.IsScrolling = false
 
 		for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
-			// TODO: More events
 			switch t := event.(type) {
 			case *sdl.QuitEvent:
 				// Ask close function if we need to close
@@ -97,6 +96,7 @@ func (app *App) Run() error {
 		app.Time = time.Since(startTime).Seconds()
 		app.DeltaTime = app.Time - app.PreviousFrameTime
 		app.PreviousFrameTime = app.Time
+		app.GetWindowSize() // This will update the window size for us :)
 
 		// Draw
 		if err := app.DrawFrame(); err != nil {

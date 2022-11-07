@@ -1,4 +1,3 @@
-// TODO: Load image from reader
 package fine
 
 import (
@@ -155,7 +154,6 @@ func (sprite *Sprite) Render(app *App, x, y int, entity *Entity) {
 		flip = sdl.FLIP_VERTICAL
 	}
 
-	// FIXME: This does not work for negative scales.
 	entity.Width, entity.Height = float64(sprite.Width)*entity.Scale.X, float64(sprite.Height)*entity.Scale.Y
 	dst := &sdl.Rect{
 		X: int32(float64(x)) + app.Width/2,

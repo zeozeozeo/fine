@@ -38,9 +38,7 @@ func (line *Line) Draw() {
 		line.entity.Color.A,
 	)
 
-	// TODO: Don't draw line if it's over the screen
 	line.app.Renderer.DrawLine(int32(x1), int32(y1), int32(x2), int32(y2))
-
 	line.app.Renderer.SetDrawColor(prevR, prevG, prevB, prevA)
 }
 
@@ -52,7 +50,7 @@ func (app *App) Line(start, end Vec2, color color.RGBA) *Entity {
 		Visible: true,
 		Opacity: 1,
 		Color:   color,
-		app: app,
+		app:     app,
 	}
 
 	lineShape := &Line{Start: start, End: end, app: app, entity: entity}

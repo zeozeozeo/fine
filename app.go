@@ -109,13 +109,20 @@ func (app *App) SetKeyEventFunc(newFunc OnKeyEventFunc) *App {
 // Sets the window width and height.
 func (app *App) SetWindowSize(width, height int32) *App {
 	app.Width, app.Height = width, height
+	app.Window.SetSize(width, height)
 	return app
+}
+
+// Sets the window width and height.
+func (app *App) GetWindowSize() (int32, int32) {
+	app.Width, app.Height = app.Window.GetSize()
+	return app.Width, app.Height
 }
 
 // Sets the title of the window.
 func (app *App) SetWindowTitle(title string) *App {
-	// TODO: Make the title update after app.Run is called
 	app.Title = title
+	app.Window.SetTitle(title)
 	return app
 }
 

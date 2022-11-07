@@ -32,7 +32,6 @@ func main() {
 	fmt.Printf("finished in %s (duration: %fmin)\n", time.Since(start), audio.Duration()/60)
 
 	for i := float64(-15); i < 15; i++ {
-		// TODO: Update app.Width and app.Height on every frame
 		rect := app.Rect(fine.NewVec2(60*i, 8), 50, 50, color.RGBA{255, 255, 255, 255}, true)
 		rects = append(rects, rect)
 	}
