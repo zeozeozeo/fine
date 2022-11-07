@@ -25,6 +25,9 @@ func (app *App) DrawFrame() error {
 	// TODO: Proper layer system
 	// Draw entities
 	for _, entity := range app.Scene.Entities {
+		if entity.UpdateFunc != nil {
+			entity.UpdateFunc(app.DeltaTime, app, entity)
+		}
 		if err := app.DrawEntity(entity); err != nil {
 			return err
 		}

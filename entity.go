@@ -3,21 +3,22 @@ package fine
 import "image/color"
 
 type Entity struct {
-	Position        Vec2          // The world position of the entity.
-	Scene           *Scene        // The scene this entity is in.
-	Texture         *Sprite       // The texture (sprite) of the entity.
-	Shape           Shape         // The shape of the entity. This is ignored if a texture is set.
-	Color           color.RGBA    // The color of the entity. This is ignored if a texture is set.
-	Scale           Vec2          // X and Y scale of the entity.
-	Opacity         float64       // Opacity of the entity between 0 and 1.
-	Visible         bool          // Specifies if the entity should be rendered or not.
-	Angle           float64       // Rotation angle.
-	Pivot           Vec2          // Rotation pivot point. This is 0,0 by default.
-	IsPivotCentered bool          // Should the pivot point be centered?
-	FlipDir         FlipDirection // The flip direction of the texture. Default: FLIP_NONE.
-	Width           float64       // Width of the texture or shape.
-	Height          float64       // Height of the texture or shape.
-	DoCollide       bool          // Can this entity collide with other entities?
+	Position        Vec2             // The world position of the entity.
+	Scene           *Scene           // The scene this entity is in.
+	Texture         *Sprite          // The texture (sprite) of the entity.
+	Shape           Shape            // The shape of the entity. This is ignored if a texture is set.
+	Color           color.RGBA       // The color of the entity. This is ignored if a texture is set.
+	Scale           Vec2             // X and Y scale of the entity.
+	Opacity         float64          // Opacity of the entity between 0 and 1.
+	Visible         bool             // Specifies if the entity should be rendered or not.
+	Angle           float64          // Rotation angle.
+	Pivot           Vec2             // Rotation pivot point. This is 0,0 by default.
+	IsPivotCentered bool             // Should the pivot point be centered?
+	FlipDir         FlipDirection    // The flip direction of the texture. Default: FLIP_NONE.
+	Width           float64          // Width of the texture or shape.
+	Height          float64          // Height of the texture or shape.
+	DoCollide       bool             // Can this entity collide with other entities?
+	UpdateFunc      EntityUpdateFunc // This function will be called before drawing the entity.
 }
 
 type FlipDirection int
@@ -27,6 +28,8 @@ const (
 	FLIP_HORIZONTAL FlipDirection = 1
 	FLIP_VERTICAL   FlipDirection = 2
 )
+
+type EntityUpdateFunc func(dt float64, app *App, entity *Entity)
 
 // Entity shapes. It must implement Draw(), which will be called
 // when the entity needs to be rendered to the screen.
@@ -153,5 +156,11 @@ func (entity *Entity) FlipToggle(flip FlipDirection) *Entity {
 // Specifies whether the entity can collide with other entities or not.
 func (entity *Entity) CanCollide(state bool) *Entity {
 	entity.DoCollide = state
+	return entity
+}
+
+// Sets the entity update function. It will be called every time before it gets drawn.
+func (entity *Entity) SetUpdateFunc(updateFunc EntityUpdateFunc) *Entity {
+	entity.UpdateFunc = updateFunc
 	return entity
 }

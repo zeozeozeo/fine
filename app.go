@@ -6,10 +6,10 @@ import (
 	"github.com/veandco/go-sdl2/sdl"
 )
 
-type OnCloseFunc func() bool                      // Function that is called after the window closes. Should return whether the window should close or not.
-type UpdateFunc func(float64, *App)               // Function that is called every frame.
-type PostRenderFunc func(*App)                    // Function that is called at the end of drawing each frame.
-type OnKeyEventFunc func(Key, KeyDirection, *App) // Function that is called when a key is down or up. Recieves the key, the direction and the app.
+type OnCloseFunc func() bool                                        // Function that is called after the window closes. Should return whether the window should close or not.
+type UpdateFunc func(dt float64, app *App)                          // Function that is called every frame.
+type PostRenderFunc func(app *App)                                  // Function that is called at the end of drawing each frame.
+type OnKeyEventFunc func(key Key, direction KeyDirection, app *App) // Function that is called when a key is down or up. Recieves the key, the direction and the app.
 
 type App struct {
 	Title       string         // Window title (TODO: Change title).
