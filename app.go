@@ -12,7 +12,7 @@ type PostRenderFunc func(app *App)                                  // Function 
 type OnKeyEventFunc func(key Key, direction KeyDirection, app *App) // Function that is called when a key is down or up. Receives the key, the direction and the app.
 
 type App struct {
-	Title       string         // Window title (TODO: Change title).
+	Title       string         // Window title.
 	Width       int32          // Window width.
 	Height      int32          // Window height.
 	Update      UpdateFunc     // Will be called every frame, receives the delta time in seconds.
@@ -20,7 +20,7 @@ type App struct {
 	OnClose     OnCloseFunc    // Will be called when the window should be closed. Should return whether the window should close or not.
 	IgnoreClose bool           // Specifies if the window should ignore quit events.
 	Running     bool           // Specifies if the app is running or not.
-	WindowFlags []WindowFlag   // SDL2 window flags. See https://github.com/veandco/go-sdl2/blob/1cc5f3cf35451b753c5838cb3760d2126b3d315e/sdl/video.go#L273
+	WindowFlags []WindowFlag   // Window flags.
 	DoClear     bool           // Do clear the previous frame before drawing the new frame?
 	ClearColor  color.RGBA     // The color to clear the background of the new frame.
 	Window      *sdl.Window    // SDL window.
