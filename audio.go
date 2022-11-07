@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/faiface/beep"
+	"github.com/faiface/beep/effects"
 	"github.com/faiface/beep/flac"
 	"github.com/faiface/beep/mp3"
 	"github.com/faiface/beep/speaker"
@@ -33,7 +34,18 @@ var (
 type Audio struct {
 	Buffer     *beep.Buffer // Audio buffer.
 	LastPlayed float64      // The time when the audio was last played.
-	app        *App
+
+	// Volume of the audio. Use SetVolume to change the volume.
+	// The volume is applied exponentially. Volume of 0 means no change.
+	// Set Silent if you want to make the audio silent.
+	Volume float64
+
+	// Natural Base for the volume exponentiation. The default is 2.
+	// In order to adjust volume along decibells, pick 10 as the Base and set Volume to dB/10.
+	Base         float64
+	Silent       bool // Specifies whether the audio should be silent.
+	app          *App
+	volumeEffect *effects.Volume
 }
 
 // Loads an audio file from a ReadCloser. If the audio sample rate doesn't match
@@ -87,6 +99,7 @@ func (app *App) LoadAudio(readCloser io.ReadCloser, inputFormat AudioFormat) (*A
 
 	audio := &Audio{
 		Buffer: buffer,
+		Base:   2,
 		app:    app,
 	}
 
@@ -113,14 +126,27 @@ func (app *App) initAudio() {
 }
 
 // Returns a brand new audio stream from the audio buffer.
-func (audio *Audio) GetStream() beep.StreamSeeker {
-	return audio.Buffer.Streamer(0, audio.Buffer.Len())
+func (audio *Audio) GetStream() beep.Streamer {
+	audio.volumeEffect = &effects.Volume{
+		Streamer: audio.Buffer.Streamer(0, audio.Buffer.Len()),
+		Volume:   audio.Volume,
+		Base:     audio.Base,
+		Silent:   audio.Silent,
+	}
+	return audio.volumeEffect
 }
 
 // Starts playing the audio. This is an asynchronous call.
-func (audio *Audio) Play() {
+func (audio *Audio) Play() *Audio {
 	audio.LastPlayed = audio.app.Time
 	speaker.Play(audio.GetStream())
+	return audio
+}
+
+func (audio *Audio) SetVolume(vol float64) *Audio {
+	audio.Volume = vol
+	audio.volumeEffect.Volume = vol
+	return audio
 }
 
 // Stops all playing audio.

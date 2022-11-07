@@ -29,11 +29,11 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("finished in %s\n", time.Since(start))
+	fmt.Printf("finished in %s (duration: %fmin)\n", time.Since(start), audio.Duration()/60)
 
-	for i := float64(-3); i < 3; i++ {
+	for i := float64(-15); i < 15; i++ {
 		// TODO: Update app.Width and app.Height on every frame
-		rect := app.Rect(fine.NewVec2(150*i, 8), 100, 100, color.RGBA{255, 255, 255, 255}, true)
+		rect := app.Rect(fine.NewVec2(60*i, 8), 50, 50, color.RGBA{255, 255, 255, 255}, true)
 		rects = append(rects, rect)
 	}
 
@@ -55,7 +55,7 @@ func update(dt float64, app *fine.App) {
 	}
 
 	for idx, rect := range rects {
-		rect.Position.Y = math.Cos(app.Time*3+(float64(idx)+1)) * 150
+		rect.Position.Y = (math.Sin(app.Time*3+(float64(idx)+1)) * 150)
 	}
 	app.Camera.Position.X = math.Sin(app.Time*2) * 150
 	app.Camera.Position.Y = math.Sin(app.Time*4)*150 + 50
