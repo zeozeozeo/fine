@@ -13,6 +13,7 @@ func (app *App) Run() error {
 	runtime.LockOSThread()
 
 	defer app.FreeSprites()
+	defer app.UnloadFontLibrary()
 
 	// Initialize SDL
 	if err := sdl.Init(sdl.INIT_EVERYTHING); err != nil {

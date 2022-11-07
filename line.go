@@ -52,6 +52,7 @@ func (app *App) Line(start, end Vec2, color color.RGBA) *Entity {
 		Visible: true,
 		Opacity: 1,
 		Color:   color,
+		app: app,
 	}
 
 	lineShape := &Line{Start: start, End: end, app: app, entity: entity}

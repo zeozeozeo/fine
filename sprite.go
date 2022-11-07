@@ -90,7 +90,10 @@ func (app *App) NewSpriteFromSurface(surface *sdl.Surface) (*Sprite, error) {
 
 // Loads the texture from the surface, if it exists.
 func (sprite *Sprite) LoadTexture(app *App) error {
-	if sprite.Surface == nil || !app.Running || app.Renderer == nil {
+	if !app.Running {
+		return nil
+	}
+	if sprite.Surface == nil || app.Renderer == nil {
 		return fmt.Errorf("renderer is not initialized, cannot load texture")
 	}
 
@@ -105,12 +108,25 @@ func (sprite *Sprite) LoadTexture(app *App) error {
 
 // Frees the sprite's SDL texture and surface.
 func (sprite *Sprite) Free() {
+	if sprite == nil {
+		return
+	}
 	if sprite.Surface != nil {
 		sprite.Surface.Free()
 	}
 	if sprite.Tex != nil {
 		sprite.Tex.Destroy()
 	}
+}
+
+func (app *App) FreeSprite(sprite *Sprite) {
+	for idx, loadedSprite := range app.LoadedSprites {
+		if loadedSprite == sprite {
+			app.LoadedSprites = append(app.LoadedSprites[:idx], app.LoadedSprites[idx+1:]...)
+			break
+		}
+	}
+	sprite = nil
 }
 
 // Sets the sprite's blend mode.

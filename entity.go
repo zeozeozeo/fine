@@ -19,6 +19,7 @@ type Entity struct {
 	Height          float64          // Height of the texture or shape.
 	DoCollide       bool             // Can this entity collide with other entities?
 	UpdateFunc      EntityUpdateFunc // This function will be called before drawing the entity.
+	app             *App
 }
 
 type FlipDirection int
@@ -46,6 +47,7 @@ func (app *App) Entity(position Vec2) *Entity {
 		Visible:   true,
 		Opacity:   1,
 		DoCollide: true,
+		app:       app,
 	}
 
 	app.Scene.Entities = append(app.Scene.Entities, entity)
@@ -64,6 +66,8 @@ func (entity *Entity) Destroy() {
 
 // Sets the texture of the entity.
 func (entity *Entity) SetTexture(sprite *Sprite) *Entity {
+	entity.Texture.Free() // Release old texture
+	entity.app.FreeSprite(entity.Texture)
 	entity.Texture = sprite
 	return entity
 }

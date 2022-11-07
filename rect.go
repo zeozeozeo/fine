@@ -66,6 +66,7 @@ func (app *App) Rect(position Vec2, w, h float64, color color.RGBA, isFilled boo
 		Width:     w,
 		Height:    h,
 		DoCollide: true,
+		app:       app,
 	}
 
 	rectShape := &Rectangle{Filled: isFilled, app: app, entity: entity}
