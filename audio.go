@@ -118,7 +118,7 @@ func (app *App) LoadAudioFromReader(reader io.Reader, inputFormat AudioFormat) (
 
 func (app *App) initAudio() {
 	beepSampleRate := beep.SampleRate(app.SampleRate)
-	// TODO: Custom buffer sizes
+
 	err := speaker.Init(beepSampleRate, beepSampleRate.N(time.Duration(app.BufferNs)*time.Nanosecond))
 	if err != nil {
 		log.Printf("[warn] failed to initialize audio speaker: %s", err)
