@@ -56,7 +56,7 @@ type App struct {
 
 	SampleRate        int   // Audio sample rate (default: 44100).
 	ResamplingQuality int   // 1: high perfomance, low quality; 3-4: balanced (recommended); 6: high CPU usage; >6 super high CPU usage (default: 4)
-	BufferNs          int64 // The buffer size in nanoseconds (default: 60000000 (60ms))
+	BufferNs          int64 // The buffer size in nanoseconds (default: 48000000 (48ms)).
 }
 
 // Creates a new app with a window title and size.
@@ -75,7 +75,7 @@ func NewApp(title string, width, height int32) *App {
 		Camera:            &Camera{Position: NewVec2(0, 0), Zoom: 1},
 		SampleRate:        44100,
 		ResamplingQuality: 4,
-		BufferNs:          60000000,
+		BufferNs:          48 * 1000000, // 48ms
 	}
 	app.initAudio()
 

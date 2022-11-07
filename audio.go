@@ -53,6 +53,7 @@ func (app *App) LoadAudio(readCloser io.ReadCloser, inputFormat AudioFormat) (*A
 	case AUDIO_WAV:
 		streamer, format, err = wav.Decode(readCloser)
 	case AUDIO_OGG:
+		// TODO: OGG support is poor, some audio sounds pitched. Find a better way to do it.
 		streamer, format, err = vorbis.Decode(readCloser)
 	case AUDIO_MOD:
 		modStreamer, format, err = app.loadMod(readCloser)
@@ -128,7 +129,7 @@ func (app *App) StopAudio() *App {
 	return app
 }
 
-// Sets the amount of nanoseconds in the audio buffer. Default: 60000000 (60ms)
+// Sets the amount of nanoseconds in the audio buffer. Default: 48000000 (48ms)
 func (app *App) SetAudioBufferNs(nanoseconds int64) *App {
 	app.BufferNs = nanoseconds
 	app.initAudio()
