@@ -123,20 +123,23 @@ func (audio *Audio) Play() {
 }
 
 // Stops all playing audio.
-func (app *App) StopAudio() {
+func (app *App) StopAudio() *App {
 	speaker.Clear()
+	return app
 }
 
 // Sets the amount of nanoseconds in the audio buffer. Default: 60000000 (60ms)
-func (app *App) SetAudioBufferNs(nanoseconds int64) {
+func (app *App) SetAudioBufferNs(nanoseconds int64) *App {
 	app.BufferNs = nanoseconds
 	app.initAudio()
+	return app
 }
 
 // Sets the sample rate of the audio. Default: 44100.
-func (app *App) SetAudioSampleRate(sampleRate int) {
+func (app *App) SetAudioSampleRate(sampleRate int) *App {
 	app.SampleRate = sampleRate
 	app.initAudio()
+	return app
 }
 
 // Returns the duration of the audio buffer in seconds.
