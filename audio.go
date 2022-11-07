@@ -105,7 +105,7 @@ func (app *App) LoadAudioFromReader(reader io.Reader, inputFormat AudioFormat) (
 func (app *App) initAudio() {
 	beepSampleRate := beep.SampleRate(app.SampleRate)
 	// TODO: Custom buffer sizes
-	err := speaker.Init(beepSampleRate, beepSampleRate.N(time.Millisecond*128))
+	err := speaker.Init(beepSampleRate, beepSampleRate.N(time.Duration(app.BufferNs)*time.Nanosecond))
 	if err != nil {
 		log.Printf("[warn] failed to initialize audio speaker: %s", err)
 	}
@@ -127,6 +127,18 @@ func (app *App) StopAudio() {
 	speaker.Clear()
 }
 
+// Sets the amount of nanoseconds in the audio buffer. Default: 60000000 (60ms)
+func (app *App) SetAudioBufferNs(nanoseconds int64) {
+	app.BufferNs = nanoseconds
+	app.initAudio()
+}
+
+// Sets the sample rate of the audio. Default: 44100.
+func (app *App) SetAudioSampleRate(sampleRate int) {
+	app.SampleRate = sampleRate
+	app.initAudio()
+}
+
 // Returns the duration of the audio buffer in seconds.
 func (audio *Audio) Duration() float64 {
 	return float64(audio.Buffer.Len()) / float64(audio.Buffer.Format().SampleRate)
@@ -137,6 +149,7 @@ func (audio *Audio) Ended() bool {
 	return (audio.app.Time - audio.LastPlayed) >= audio.Duration()
 }
 
+// .mod file playback
 type modStreamer struct {
 	player *mod.Player
 }
