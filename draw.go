@@ -36,11 +36,16 @@ func (app *App) DrawFrame() error {
 	// Check queued functions
 	for idx, cronFunc := range app.QueuedFunctions {
 		cronFunc.Left -= app.DeltaTime
-		if cronFunc.Left <= 0 {
+
+		if cronFunc.Left <= 0 && !cronFunc.shouldRepeat {
 			if cronFunc.Func != nil {
 				cronFunc.Func(app)
 			}
 			app.QueuedFunctions = append(app.QueuedFunctions[:idx], app.QueuedFunctions[idx+1:]...)
+		} else if cronFunc.Left <= 0 && cronFunc.shouldRepeat {
+			cronFunc.Func(app)
+			// Start counting down again
+			cronFunc.Left = cronFunc.startTime
 		}
 	}
 
