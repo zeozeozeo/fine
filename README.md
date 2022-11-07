@@ -2,6 +2,8 @@
 
 Fine is a cross-platform OpenGL 2D engine (with [SDL2](https://github.com/veandco/go-sdl2)) written with Go. It has audio support, text rendering, collisons and much more.
 
+![A platformer character](https://github.com/zeozeozeo/fine/raw/main/internal/examples/platformer/platformer.gif)
+
 # Getting Started
 
 ## [First of all, install the SDL2 dependencies.](https://github.com/veandco/go-sdl2#requirements)
