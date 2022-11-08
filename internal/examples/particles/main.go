@@ -35,7 +35,9 @@ func main() {
 }
 
 func update(dt float64, app *fine.App) {
-	emitParticle(app)
+	for i := 0; i < 2; i++ {
+		emitParticle(app)
+	}
 
 	// Remove decayed particles
 	for idx, particle := range particles {
