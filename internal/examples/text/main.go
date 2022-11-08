@@ -43,5 +43,6 @@ func entityUpdate(dt float64, app *fine.App, entity *fine.Entity) {
 		text[:int(app.Time*10)%(len(text)+1)],
 		color.RGBA{255, 255, 255, 255},
 	)
+	app.FreeSprite(entity.Texture) // We don't need the previous texture anymore, free it
 	entity.SetTexture(renderedString)
 }

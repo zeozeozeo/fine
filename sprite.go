@@ -121,6 +121,7 @@ func (app *App) FreeSprite(sprite *Sprite) {
 	for idx, loadedSprite := range app.LoadedSprites {
 		if loadedSprite == sprite {
 			app.LoadedSprites = append(app.LoadedSprites[:idx], app.LoadedSprites[idx+1:]...)
+			sprite.Free()
 			break
 		}
 	}
@@ -133,7 +134,7 @@ func (sprite *Sprite) SetBlendMode(blendMode BlendMode) *Sprite {
 	return sprite
 }
 
-func (app *App) isSpriteInUse(sprite *Sprite, exclude *Entity) bool {
+func (app *App) IsSpriteInUse(sprite *Sprite, exclude *Entity) bool {
 	for _, entity := range app.Scene.Entities {
 		if entity == exclude {
 			continue

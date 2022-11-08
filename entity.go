@@ -59,7 +59,7 @@ func (app *App) Entity(position Vec2) *Entity {
 	return entity
 }
 
-// Removes this entity from the scene.
+// Removes this entity from the scene. This does not free the sprite
 func (entity *Entity) Destroy() {
 	for idx, sceneEntity := range entity.Scene.Entities {
 		if sceneEntity == entity {
@@ -69,12 +69,9 @@ func (entity *Entity) Destroy() {
 	}
 }
 
-// Sets the texture of the entity.
+// Sets the texture of the entity. If you don't need the old texture anymore,
+// remember to free it with app.FreeSprite().
 func (entity *Entity) SetTexture(sprite *Sprite) *Entity {
-	if !entity.app.isSpriteInUse(sprite, entity) {
-		entity.Texture.Free() // Release old texture
-		entity.app.FreeSprite(entity.Texture)
-	}
 	entity.Texture = sprite
 	return entity
 }
