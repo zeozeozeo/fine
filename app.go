@@ -165,7 +165,6 @@ func (app *App) FreeSprites() int {
 	amount := 0
 	for idx, sprite := range app.LoadedSprites {
 		sprite.Free()
-		sprite = nil
 
 		// FIXME: append() is slow for removing elements from slices, see
 		// https://stackoverflow.com/a/37335777

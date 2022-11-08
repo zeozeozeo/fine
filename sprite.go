@@ -29,7 +29,6 @@ const (
 
 // Loads a new sprite from path. This uses the file extension
 // to identify the format.
-// Remember to call Free() on the surface when you're done with it.
 func (app *App) NewSpriteFromPath(path string) (*Sprite, error) {
 	surface, err := img.Load(path)
 	if err != nil {
@@ -132,6 +131,18 @@ func (app *App) FreeSprite(sprite *Sprite) {
 func (sprite *Sprite) SetBlendMode(blendMode BlendMode) *Sprite {
 	sprite.BlendMode = sdl.BlendMode(blendMode)
 	return sprite
+}
+
+func (app *App) isSpriteInUse(sprite *Sprite, exclude *Entity) bool {
+	for _, entity := range app.Scene.Entities {
+		if entity == exclude {
+			continue
+		}
+		if entity.Texture == sprite {
+			return true
+		}
+	}
+	return false
 }
 
 // Draws the sprite at the given screen coordinates.

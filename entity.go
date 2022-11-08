@@ -66,8 +66,10 @@ func (entity *Entity) Destroy() {
 
 // Sets the texture of the entity.
 func (entity *Entity) SetTexture(sprite *Sprite) *Entity {
-	entity.Texture.Free() // Release old texture
-	entity.app.FreeSprite(entity.Texture)
+	if !entity.app.isSpriteInUse(sprite, entity) {
+		entity.Texture.Free() // Release old texture
+		entity.app.FreeSprite(entity.Texture)
+	}
 	entity.Texture = sprite
 	return entity
 }
