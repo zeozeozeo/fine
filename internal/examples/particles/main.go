@@ -2,6 +2,7 @@
 package main
 
 import (
+	"fmt"
 	"image/color"
 	"math"
 	"math/rand"
@@ -21,8 +22,6 @@ var (
 	spawnOrigin      fine.Vec2 = fine.NewVec2(0, 300)
 	particleSize     float64   = 10
 	particleLifetime float64   = 1
-	lastSpawn        float64
-	spawnDelay       float64
 )
 
 func main() {
@@ -36,10 +35,7 @@ func main() {
 }
 
 func update(dt float64, app *fine.App) {
-	if app.Time-lastSpawn >= spawnDelay {
-		emitParticle(app)
-		lastSpawn = app.Time
-	}
+	emitParticle(app)
 
 	// Remove decayed particles
 	for idx, particle := range particles {
@@ -51,6 +47,8 @@ func update(dt float64, app *fine.App) {
 
 		particleUpdate(dt, app, particle)
 	}
+
+	fmt.Println(len(particles))
 }
 
 func emitParticle(app *fine.App) {
