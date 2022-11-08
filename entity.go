@@ -19,7 +19,11 @@ type Entity struct {
 	Height          float64          // Height of the texture or shape.
 	DoCollide       bool             // Can this entity collide with other entities?
 	UpdateFunc      EntityUpdateFunc // This function will be called before drawing the entity.
-	app             *App
+	Parent          *Entity          // The parent of this entity.
+
+	app              *App
+	previousPosition Vec2
+	positionDelta    Vec2
 }
 
 type FlipDirection int
@@ -41,13 +45,14 @@ type Shape interface {
 // Creates a new entity on the scene.
 func (app *App) Entity(position Vec2) *Entity {
 	entity := &Entity{
-		Position:  position,
-		Scene:     app.Scene,
-		Scale:     NewVec2(1, 1),
-		Visible:   true,
-		Opacity:   1,
-		DoCollide: true,
-		app:       app,
+		Position:         position,
+		Scene:            app.Scene,
+		Scale:            NewVec2(1, 1),
+		Visible:          true,
+		Opacity:          1,
+		DoCollide:        true,
+		app:              app,
+		previousPosition: position,
 	}
 
 	app.Scene.Entities = append(app.Scene.Entities, entity)
@@ -168,5 +173,18 @@ func (entity *Entity) CanCollide(state bool) *Entity {
 // Sets the entity update function. It will be called every time before it gets drawn.
 func (entity *Entity) SetUpdateFunc(updateFunc EntityUpdateFunc) *Entity {
 	entity.UpdateFunc = updateFunc
+	return entity
+}
+
+// Parents this entity to an another entity. Children will follow the parent's
+// position.
+func (entity *Entity) ParentTo(parent *Entity) *Entity {
+	entity.Parent = parent
+	return entity
+}
+
+// Unparents this entity.
+func (entity *Entity) RemoveParent() *Entity {
+	entity.Parent = nil
 	return entity
 }

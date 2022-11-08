@@ -25,11 +25,22 @@ func (app *App) DrawFrame() error {
 	// TODO: Proper layer system
 	// Draw entities
 	for _, entity := range app.Scene.Entities {
+		// Follow parent (TODO: Rotate around parent)
+		if entity.Parent != nil {
+			entity.Position.X += entity.Parent.positionDelta.X
+			entity.Position.Y += entity.Parent.positionDelta.Y
+		}
+
 		if entity.UpdateFunc != nil {
 			entity.UpdateFunc(app.DeltaTime, app, entity)
 		}
 		if err := app.DrawEntity(entity); err != nil {
 			return err
+		}
+
+		if entity.previousPosition.X != entity.Position.X || entity.previousPosition.Y != entity.Position.Y {
+			entity.positionDelta = entity.Position.Sub(entity.previousPosition)
+			entity.previousPosition = entity.Position
 		}
 	}
 

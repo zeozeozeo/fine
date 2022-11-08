@@ -57,16 +57,17 @@ func (rect *Rectangle) Draw() {
 // Creates a new rectangle on the scene.
 func (app *App) Rect(position Vec2, w, h float64, color color.RGBA, isFilled bool) *Entity {
 	entity := &Entity{
-		Position:  position,
-		Scene:     app.Scene,
-		Scale:     NewVec2(1, 1),
-		Visible:   true,
-		Opacity:   1,
-		Color:     color,
-		Width:     w,
-		Height:    h,
-		DoCollide: true,
-		app:       app,
+		Position:         position,
+		Scene:            app.Scene,
+		Scale:            NewVec2(1, 1),
+		Visible:          true,
+		Opacity:          1,
+		Color:            color,
+		Width:            w,
+		Height:           h,
+		DoCollide:        true,
+		app:              app,
+		previousPosition: position,
 	}
 
 	rectShape := &Rectangle{Filled: isFilled, app: app, entity: entity}
