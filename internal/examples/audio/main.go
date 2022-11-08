@@ -55,7 +55,12 @@ func update(dt float64, app *fine.App) {
 
 	for idx, rect := range rects {
 		rect.Position.Y = (math.Sin(app.Time*3+(float64(idx)+1)) * 150)
+		rc := 255 - app.ClearColor.R
+		rect.Color.R, rect.Color.G, rect.Color.B = rc, rc, rc
 	}
 	app.Camera.Position.X = math.Sin(app.Time*2) * 150
 	app.Camera.Position.Y = math.Sin(app.Time*4)*150 + 50
+
+	c := uint8(((math.Sin((2*app.Time+3)*math.Pi/2) + 1) / 2) * 255)
+	app.ClearColor.R, app.ClearColor.G, app.ClearColor.B = c, c, c
 }
