@@ -22,7 +22,7 @@ func main() {
 		ParentTo(entity1)
 
 	entity1.SetUpdateFunc(func(dt float64, app *fine.App, entity *fine.Entity) {
-		entity.Position.Y += 30 * dt
+		entity.Position.Y += 60 * dt
 		entity2.Position.X = 200 * math.Sin(app.Time*5)
 	})
 
