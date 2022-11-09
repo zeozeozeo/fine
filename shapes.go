@@ -99,13 +99,23 @@ type Polygon struct {
 	Point1 Vec2 // First point.
 	Point2 Vec2 // Second point.
 	Point3 Vec2 // Third point.
+	Filled bool
+	HasAA  bool
 	app    *App
 	entity *Entity
 }
 
-func (app *App) Polygon(point1, point2, point3 Vec2, color color.RGBA) *Entity {
+func (app *App) Polygon(point1, point2, point3 Vec2, color color.RGBA, filled bool, hasAA bool) *Entity {
 	entity := baseEntity(app, Vec2{}, 0, 0, color)
-	entity.Shape = &Polygon{Point1: point1, Point2: point2, Point3: point3, app: app, entity: entity}
+	entity.Shape = &Polygon{
+		Point1: point1,
+		Point2: point2,
+		Point3: point3,
+		app:    app,
+		entity: entity,
+		Filled: filled,
+		HasAA:  hasAA,
+	}
 	return entity
 }
 
@@ -151,14 +161,37 @@ func (poly *Polygon) Draw() {
 			0,
 		)
 	} else {
-		gfx.PolygonRGBA(
-			poly.app.Renderer,
-			[]int16{ax1, ax2, ax3},
-			[]int16{ay1, ay2, ay3},
-			poly.entity.Color.R,
-			poly.entity.Color.G,
-			poly.entity.Color.B,
-			poly.entity.Color.A,
-		)
+		switch {
+		case poly.Filled:
+			gfx.FilledPolygonRGBA(
+				poly.app.Renderer,
+				[]int16{ax1, ax2, ax3},
+				[]int16{ay1, ay2, ay3},
+				poly.entity.Color.R,
+				poly.entity.Color.G,
+				poly.entity.Color.B,
+				poly.entity.Color.A,
+			)
+		case poly.HasAA:
+			gfx.AAPolygonRGBA(
+				poly.app.Renderer,
+				[]int16{ax1, ax2, ax3},
+				[]int16{ay1, ay2, ay3},
+				poly.entity.Color.R,
+				poly.entity.Color.G,
+				poly.entity.Color.B,
+				poly.entity.Color.A,
+			)
+		default:
+			gfx.PolygonRGBA(
+				poly.app.Renderer,
+				[]int16{ax1, ax2, ax3},
+				[]int16{ay1, ay2, ay3},
+				poly.entity.Color.R,
+				poly.entity.Color.G,
+				poly.entity.Color.B,
+				poly.entity.Color.A,
+			)
+		}
 	}
 }
