@@ -195,3 +195,8 @@ func (poly *Polygon) Draw() {
 		}
 	}
 }
+
+// Draws a pixel (with blending) at screen coordinates.
+func (app *App) SetPixel(x, y int32, color color.RGBA) {
+	gfx.PixelRGBA(app.Renderer, x, y, color.R, color.G, color.B, color.A)
+}
