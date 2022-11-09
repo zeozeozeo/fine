@@ -40,6 +40,24 @@ func (entity *Entity) getColors() (uint8, uint8, uint8, uint8) {
 		entity.Color.A
 }
 
+func baseEntity(app *App, position Vec2, w, h float64, color color.RGBA) *Entity {
+	entity := &Entity{
+		Position:         position,
+		Scene:            app.Scene,
+		Scale:            NewVec2(1, 1),
+		Visible:          true,
+		Opacity:          1,
+		Color:            color,
+		Width:            w,
+		Height:           h,
+		DoCollide:        true,
+		app:              app,
+		previousPosition: position,
+	}
+	app.Scene.Entities = append(app.Scene.Entities, entity)
+	return entity
+}
+
 type CircleShape struct {
 	HasAA  bool // Is the circle antialiased?
 	Filled bool // Is the circle filled?
@@ -75,20 +93,72 @@ func (app *App) Circle(position Vec2, radius float64, color color.RGBA, filled, 
 	return entity
 }
 
-func baseEntity(app *App, position Vec2, w, h float64, color color.RGBA) *Entity {
-	entity := &Entity{
-		Position:         position,
-		Scene:            app.Scene,
-		Scale:            NewVec2(1, 1),
-		Visible:          true,
-		Opacity:          1,
-		Color:            color,
-		Width:            w,
-		Height:           h,
-		DoCollide:        true,
-		app:              app,
-		previousPosition: position,
-	}
-	app.Scene.Entities = append(app.Scene.Entities, entity)
+// renderer *sdl.Renderer, vx, vy []int16, r, g, b, a uint8
+
+type Polygon struct {
+	Point1 Vec2 // First point.
+	Point2 Vec2 // Second point.
+	Point3 Vec2 // Third point.
+	app    *App
+	entity *Entity
+}
+
+func (app *App) Polygon(point1, point2, point3 Vec2, color color.RGBA) *Entity {
+	entity := baseEntity(app, Vec2{}, 0, 0, color)
+	entity.Shape = &Polygon{Point1: point1, Point2: point2, Point3: point3, app: app, entity: entity}
 	return entity
+}
+
+func (poly *Polygon) Draw() {
+	posX, posY := poly.app.Camera.WorldToScreen(
+		NewVec2(
+			poly.Point1.X*poly.app.Camera.Zoom,
+			poly.Point1.Y*poly.app.Camera.Zoom,
+		),
+	)
+
+	ax1 := int16(math.Round(float64(posX) + (float64(poly.app.Width) / 2)))
+	ay1 := int16(math.Round(float64(posY) + (float64(poly.app.Height) / 2)))
+
+	posX, posY = poly.app.Camera.WorldToScreen(
+		NewVec2(
+			poly.Point2.X*poly.entity.app.Camera.Zoom,
+			poly.Point2.Y*poly.entity.app.Camera.Zoom,
+		),
+	)
+
+	ax2 := int16(math.Round(float64(posX) + (float64(poly.app.Width) / 2)))
+	ay2 := int16(math.Round(float64(posY) + (float64(poly.app.Height) / 2)))
+
+	posX, posY = poly.app.Camera.WorldToScreen(
+		NewVec2(
+			poly.Point3.X*poly.entity.app.Camera.Zoom,
+			poly.Point3.Y*poly.entity.app.Camera.Zoom,
+		),
+	)
+
+	ax3 := int16(math.Round(float64(posX) + (float64(poly.app.Width) / 2)))
+	ay3 := int16(math.Round(float64(posY) + (float64(poly.app.Height) / 2)))
+
+	if poly.entity.Texture != nil {
+		gfx.TexturedPolygon(
+			poly.app.Renderer,
+			[]int16{ax1, ax2, ax3},
+			[]int16{ay1, ay2, ay3},
+			poly.entity.Texture.Surface,
+			// TODO: Custom texture offset
+			0,
+			0,
+		)
+	} else {
+		gfx.PolygonRGBA(
+			poly.app.Renderer,
+			[]int16{ax1, ax2, ax3},
+			[]int16{ay1, ay2, ay3},
+			poly.entity.Color.R,
+			poly.entity.Color.G,
+			poly.entity.Color.B,
+			poly.entity.Color.A,
+		)
+	}
 }
