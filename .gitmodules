@@ -1,0 +1,3 @@
+[submodule "fine-examples"]
+	path = fine-examples
+	url = https://github.com/zeozeozeo/fine-examples
