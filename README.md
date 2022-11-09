@@ -14,7 +14,7 @@ Fine is a cross-platform OpenGL 2D engine (with [SDL2](https://github.com/veandc
 
 ## [First of all, install the SDL2 dependencies.](https://github.com/veandco/go-sdl2#requirements)
 
-The SDL2 `gfx` and `mixer` packages are not necessary, Fine does not use them.
+The SDL2 `mixer` package is not necessary, Fine does not use it.
 
 When distributing on Windows, make sure to move the SDL2 dynamic link libraries in the same folder as the executable.
 

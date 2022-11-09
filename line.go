@@ -1,10 +1,15 @@
 package fine
 
-import "image/color"
+import (
+	"image/color"
+
+	"github.com/veandco/go-sdl2/gfx"
+)
 
 type Line struct {
 	Start  Vec2    // Start of the line in the world.
 	End    Vec2    // End of the line in the world.
+	HasAA  bool    // Specifies if this line is antialiased.
 	app    *App    // The app this line belongs to.
 	entity *Entity // The entity this rectangle belongs to.
 }
@@ -26,24 +31,35 @@ func (line *Line) Draw() {
 		),
 	)
 
-	prevR, prevG, prevB, prevA, err := line.app.Renderer.GetDrawColor()
-	if err != nil {
-		prevR, prevG, prevB, prevA = 0, 0, 0, 0
+	if !line.HasAA {
+		prevR, prevG, prevB, prevA, err := line.app.Renderer.GetDrawColor()
+		if err != nil {
+			prevR, prevG, prevB, prevA = 0, 0, 0, 0
+		}
+
+		line.app.Renderer.SetDrawColor(
+			line.entity.Color.R,
+			line.entity.Color.G,
+			line.entity.Color.B,
+			line.entity.Color.A,
+		)
+
+		line.app.Renderer.DrawLine(int32(x1), int32(y1), int32(x2), int32(y2))
+		line.app.Renderer.SetDrawColor(prevR, prevG, prevB, prevA)
+	} else {
+		gfx.AALineRGBA(
+			line.app.Renderer,
+			int32(x1), int32(y1), int32(x2), int32(y2),
+			line.entity.Color.R,
+			line.entity.Color.G,
+			line.entity.Color.B,
+			line.entity.Color.A,
+		)
 	}
-
-	line.app.Renderer.SetDrawColor(
-		line.entity.Color.R,
-		line.entity.Color.G,
-		line.entity.Color.B,
-		line.entity.Color.A,
-	)
-
-	line.app.Renderer.DrawLine(int32(x1), int32(y1), int32(x2), int32(y2))
-	line.app.Renderer.SetDrawColor(prevR, prevG, prevB, prevA)
 }
 
 // Creates a new line on the scene.
-func (app *App) Line(start, end Vec2, color color.RGBA) *Entity {
+func (app *App) Line(start, end Vec2, color color.RGBA, hasAA bool) *Entity {
 	entity := &Entity{
 		Scene:   app.Scene,
 		Scale:   NewVec2(1, 1),
@@ -53,7 +69,7 @@ func (app *App) Line(start, end Vec2, color color.RGBA) *Entity {
 		app:     app,
 	}
 
-	lineShape := &Line{Start: start, End: end, app: app, entity: entity}
+	lineShape := &Line{Start: start, End: end, app: app, entity: entity, HasAA: hasAA}
 	entity.Shape = lineShape
 
 	app.Scene.Entities = append(app.Scene.Entities, entity)
