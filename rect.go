@@ -3,13 +3,15 @@ package fine
 import (
 	"image/color"
 
+	"github.com/veandco/go-sdl2/gfx"
 	"github.com/veandco/go-sdl2/sdl"
 )
 
 type Rectangle struct {
-	Filled bool    // Specifies whether the rect is filled or not.
-	app    *App    // The app this rectangle belongs to.
-	entity *Entity // The entity this rectangle belongs to.
+	Filled   bool    // Specifies whether the rect is filled or not.
+	Rounding int32   // The rounding of the rectangle, 0 = disabled.
+	app      *App    // The app this rectangle belongs to.
+	entity   *Entity // The entity this rectangle belongs to.
 }
 
 // Draws a rectangle to the screen.
@@ -45,9 +47,25 @@ func (rect *Rectangle) Draw() {
 		return
 	}
 
-	if rect.Filled {
-		rect.app.Renderer.FillRect(sdlRect)
-	} else {
+	switch {
+	case rect.Filled:
+		if rect.Rounding != 0 {
+			rect.app.Renderer.FillRect(sdlRect)
+		} else {
+			gfx.RoundedRectangleRGBA(
+				rect.app.Renderer,
+				sdlRect.X,
+				sdlRect.Y,
+				sdlRect.X+sdlRect.W,
+				sdlRect.Y+sdlRect.H,
+				rect.Rounding,
+				rect.entity.Color.R,
+				rect.entity.Color.G,
+				rect.entity.Color.B,
+				rect.entity.Color.A,
+			)
+		}
+	default:
 		rect.app.Renderer.DrawRect(sdlRect)
 	}
 
