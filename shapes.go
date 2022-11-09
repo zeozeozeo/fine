@@ -76,7 +76,7 @@ func (app *App) Circle(position Vec2, radius float64, color color.RGBA, filled, 
 }
 
 func baseEntity(app *App, position Vec2, w, h float64, color color.RGBA) *Entity {
-	return &Entity{
+	entity := &Entity{
 		Position:         position,
 		Scene:            app.Scene,
 		Scale:            NewVec2(1, 1),
@@ -89,4 +89,6 @@ func baseEntity(app *App, position Vec2, w, h float64, color color.RGBA) *Entity
 		app:              app,
 		previousPosition: position,
 	}
+	app.Scene.Entities = append(app.Scene.Entities, entity)
+	return entity
 }
